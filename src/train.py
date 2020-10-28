@@ -26,8 +26,8 @@ parser.add_argument('--batch_size', default=32, type=int, help='train batch_size
 parser.add_argument('--num_epochs', default=50, type=int, help='train epoch number')
 parser.add_argument('--lambda_class', default=1, type=float)
 parser.add_argument('--all_lambdas', default=False, action='store_true')
-parser.add_argument('--classifier_name', default="resnet18", type=str)
-parser.add_argument('--dataset', type=str, default="cat_vs_dog")
+parser.add_argument('--classifier_name', default="resnet50", type=str)
+parser.add_argument('--dataset', type=str, default="covid_vs_nocovid")
 
 opt = parser.parse_args()
 
