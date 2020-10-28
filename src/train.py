@@ -21,8 +21,8 @@ from pytorchtools import EarlyStopping
 
 
 parser = argparse.ArgumentParser(description='Train Super Resolution Models')
-parser.add_argument('--data_size', default=64, type=int, help='imgs resized to (data_size,data_size)')
-parser.add_argument('--batch_size', default=32, type=int, help='train batch_size number')
+parser.add_argument('--data_size', default=512, type=int, help='imgs resized to (data_size,data_size)')
+parser.add_argument('--batch_size', default=8, type=int, help='train batch_size number')
 parser.add_argument('--num_epochs', default=50, type=int, help='train epoch number')
 parser.add_argument('--lambda_class', default=1, type=float)
 parser.add_argument('--all_lambdas', default=False, action='store_true')
