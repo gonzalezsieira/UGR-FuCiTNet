@@ -40,8 +40,10 @@ DATA_SIZE = opt.data_size
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(torch.cuda.current_device())
-print(torch.cuda.get_device_name(0))
+print("Using device: %s" % device)
+if torch.cuda.is_available():
+    print(torch.cuda.current_device())
+    print(torch.cuda.get_device_name(0))
 
 
 def validate(G_dict, classifier, val_loader, criterion_classifier, class_names):
