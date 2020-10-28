@@ -141,9 +141,9 @@ def train(train_set):
 
             for class_name in class_names:
                 netG = Generator()
-                G_dict[class_name] = netG.cuda()
+                G_dict[class_name] = netG.to(device)
                 generator_criterion = GeneratorLoss()
-                G_criterion_dict[class_name] = generator_criterion.cuda()
+                G_criterion_dict[class_name] = generator_criterion.to(device)
                 optimizers_dict[class_name] = optim.Adam(G_dict[class_name].parameters(),
                                                          lr=0.0001, weight_decay=1e-4)
 
@@ -163,7 +163,7 @@ def train(train_set):
             num_ftrs = classifier.fc.in_features
             classifier.fc = nn.Linear(num_ftrs, len(class_names))
             classifier.name = CLASSIFIER_NAME
-            classifier.cuda()
+            classifier.to(device)
 
             print("FOLD {}".format(fold_idx))
             train_sampler = SubsetRandomSampler(train_index)
@@ -193,11 +193,11 @@ def train(train_set):
 
                     input_img = Variable(target)
                     if torch.cuda.is_available():
-                        input_img = input_img.cuda()
+                        input_img = input_img.to(device)
                         label = label.to(device)
                     z = Variable(data)
                     if torch.cuda.is_available():
-                        z = z.cuda()
+                        z = z.to(device)
 
                     transformed_imgs = []
                     unfold_labels = []
