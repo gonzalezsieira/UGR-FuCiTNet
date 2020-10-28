@@ -1,10 +1,12 @@
 import argparse
 import os
+import cv2
 import torch
 import pandas as pd
 import torch.optim as optim
 import torch.utils.data
 import torch.nn as nn
+from PIL import Image
 from torch.optim import lr_scheduler
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
@@ -328,8 +330,42 @@ if __name__ == "__main__":
 
     data_dir = os.path.join("data", DATASET, 'train')
     print(data_dir)
+
+    def gaussian_blur(img):
+        """
+        Applies a Gaussian blur to the input image
+        :param img: PIL image
+        :return: blurred PIL image
+        """
+        image = np.array(img)
+        image_blur = cv2.GaussianBlur(image, (9, 9), 0.5)
+        new_image = Image.fromarray(image_blur)
+        return new_image
+
+    transforms_training = transforms.Compose([
+        transforms.Resize(DATA_SIZE),
+        transforms.CenterCrop(DATA_SIZE),
+        transforms.RandomApply([
+            transforms.Lambda(gaussian_blur)
+        ], p=0.7),
+        transforms.RandomApply([
+            transforms.ColorJitter(contrast=.05, brightness=.05)
+        ], p=0.7),
+        transforms.RandomApply([
+            transforms.RandomAffine(degrees=10, fillcolor=0)
+        ], p=0.7),
+        transforms.RandomApply([
+            transforms.RandomAffine(degrees=0, translate=(0.05, 0.05), fillcolor=0)
+        ], p=0.7),
+        transforms.RandomApply([
+            transforms.RandomAffine(degrees=0, scale=(0.8, 1.2), fillcolor=0)
+        ], p=0.7),
+        # Transform images to Tensor type
+        transforms.ToTensor(),
+        # Normalization of the input images
+        transforms.Normalize(mean=[0.4337], std=[0.2964])
+    ])
+
     train_set = ImageFolderWithPaths_noUps(data_dir, DATA_SIZE,
-                                           img_transforms=transforms.Compose([transforms.RandomHorizontalFlip(),
-                                                                              transforms.RandomAffine(5),
-                                                                              transforms.RandomRotation(5)]))
+                                           img_transforms=transforms_training)
     train(train_set)

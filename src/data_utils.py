@@ -43,11 +43,4 @@ class ImageFolderWithPaths_noUps(datasets.ImageFolder):
     def __getitem__(self, index):
         original_tuple = super(ImageFolderWithPaths_noUps, self).__getitem__(index)
 
-        hr_scale = Resize(size=(self.data_size, self.data_size), interpolation=Image.BICUBIC)
-        width, height = original_tuple[0].size
-        if width == self.data_size and height == self.data_size:
-            hr_image = original_tuple[0]
-        else:
-            hr_image = hr_scale(original_tuple[0])
-
-        return ToTensor()(hr_image), ToTensor()(hr_image), original_tuple[1]
+        return original_tuple[0], original_tuple[0], original_tuple[1]
